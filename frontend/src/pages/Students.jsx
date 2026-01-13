@@ -17,12 +17,16 @@ function Students() {
                     courseName: data.courseName,
                     teacherName: data.teacherName
                 }
-            ]
+            ],
+            teacher: data.teacher
+
         }
         await axios.post('http://localhost:3000/students', formatedData)
         setShowModel(false)
 
     }
+
+
     return (
         <>
             <div className="space-y-6 p-6">

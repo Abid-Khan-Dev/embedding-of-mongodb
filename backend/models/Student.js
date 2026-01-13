@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 
 
 const studentSchema = new mongoose.Schema({
@@ -11,8 +11,12 @@ const studentSchema = new mongoose.Schema({
                 required: true
             },
             teacherName: String,
-        }
-    ]
+        },
+    ],
+    teacher: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Teacher'
+    }
 })
 
 const Student = mongoose.model("Student", studentSchema);

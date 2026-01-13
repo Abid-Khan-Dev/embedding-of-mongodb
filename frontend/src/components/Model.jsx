@@ -1,12 +1,16 @@
+import axios from 'axios';
 import React, { useState } from 'react'
+import { useEffect } from 'react';
 
 function Model({ onClose, onSubmit, }) {
     const [form, setForm] = useState({
         name: '',
         rollNo: '',
         courseName: '',
-        teacherName: ''
+        teacherName: '',
+        teacher: ''
     })
+    const [teachers, setTeachers] = useState([])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -20,6 +24,15 @@ function Model({ onClose, onSubmit, }) {
         e.preventDefault();
         onSubmit(form)
     }
+    const getTeachers = async () => {
+        const res = await axios.get('http://localhost:3000/teachers')
+        console.log(res, 'teachers');
+        setTeachers(res.data.teachers)
+    }
+    useEffect(() => {
+        getTeachers()
+    }, [])
+
     return (
         <div
             onClick={onClose}
@@ -49,7 +62,7 @@ function Model({ onClose, onSubmit, }) {
                             <option value="backend">Backend</option>
                         </select>
                     </div>
-                    <div>
+                    {/* <div>
                         <label className='text-sm font-medium block  text-gray-700 mb-1' htmlFor="teacher">Teacher</label>
                         <select className='w-full py-2 px-4 text-gray-700 outline-0 focus:ring focus:ring-blue-600 rounded-xl shadow border border-gray-300' id='teacher' name='teacherName'
                             onChange={handleChange}
@@ -59,8 +72,17 @@ function Model({ onClose, onSubmit, }) {
                             <option value="ibrahim">Ibrahim Sir</option>
                             <option value="abid">Abid</option>
                         </select>
+                    </div> */}
+                    <div>
+                        <label className='text-sm font-medium block  text-gray-700 mb-1' htmlFor="teacher">Teacher</label>
+                        <select className='w-full py-2 px-4 text-gray-700 outline-0 focus:ring focus:ring-blue-600 rounded-xl shadow border border-gray-300' id='teacher' name='teacher'
+                            onChange={handleChange}
+                            value={form.teacher}
+                        >
+                            <option value="" disabled>Select a teacher</option>
+                            {teachers.map(teacher => <option key={teacher._id} value={teacher._id}>{teacher.name}</option>)}
+                        </select>
                     </div>
-
                     <div className='flex justify-end gap-2 '>
                         <button className='py-2 px-3 bg-gray-500 hover:bg-gray-700 rounded-md text-white' onClick={onClose}>Close</button>
                         <button className='py-2 px-4 bg-blue-600 hover:bg-blue-800 text-white rounded-md' type="submit">Submit</button>

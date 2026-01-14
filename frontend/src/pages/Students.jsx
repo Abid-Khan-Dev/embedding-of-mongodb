@@ -1,10 +1,11 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import image from '../assets/licensed-image.jfif'
 import Model from '../components/Model';
 import axios from 'axios';
 function Students() {
     const [showModel, setShowModel] = useState(false)
+    const [students, setStudents] = useState([])
 
     async function handleSubmit(data) {
         // await axios.get()
@@ -25,7 +26,15 @@ function Students() {
         setShowModel(false)
 
     }
+    useEffect(() => {
+        async function fetchStudents() {
+            const res = await axios.get('http://localhost:3000/students')
+            console.log(res);
 
+            setStudents(res.data.students)
+        }
+        fetchStudents()
+    }, [])
 
     return (
         <>
@@ -45,31 +54,36 @@ function Students() {
 
                 </div>
 
-                <div className="flex mt-20">
-                    <div className="border border-gray-300 pl-5 px-2 pt-4 w-[320px]  rounded-lg ">
-                        <div className='flex justify-between relative'>
-                            <h2 className="text-gray-800 font-semibold text-2xl">item</h2>
-                            <div className='h-20 w-20 rounded-md overflow-hidden absolute top-1 right-3'>
-                                <img src={image} alt="" className='h-full object-cover w-full' />
+                <div className="flex mt-20 gap-3">
+                    {students.map(std => (
+                        <div className="border border-gray-300 pl-5 px-2 pt-4 w-[320px]  rounded-lg ">
+                            <div className='flex justify-between relative'>
+                                <h2 className="text-gray-800 font-semibold text-2xl">item</h2>
+                                {/* <div className='h-20 w-20 rounded-md overflow-hidden absolute top-1 right-3'>
+                                    <img src={image} alt="" className='h-full object-cover w-full' />
+                                </div> */}
+                            </div>
+                            <div className='flex gap-2 mt-3 text-xs'>
+                                <span className='font-medium text-gray-700'>Name</span>
+                                <span>{std.name}</span>
+                            </div>
+                            <div className='flex gap-2 text-xs'>
+                                <span className='font-medium text-gray-700'>Roll No</span>
+                                <span> {std.rollNo}</span>
+                            </div>
+                            <div className='flex gap-2 text-xs'>
+                                <span className='font-medium text-gray-700'>Teacher</span>
+                                <span >{std.teacher.name}</span>
+                                <span>{std.teacher.salary}</span>
+                                <span>{std.teacher.phone}</span>
+                            </div>
+                            <div className='flex justify-end mt-4 gap-1  border-t border-gray-300 p-2'>
+                                <button onClick={() => setShowModel(true)} className='text-gray-700 hover:text-blue-500 px-2 py-1 text-xs border border-gray-400 hover:border-blue-500 rounded-lg '>Edit</button>
+                                <button className='text-gray-700  px-2 py-1 border border-gray-500 hover:border-red-600 hover:text-red-600 rounded-lg text-xs'>Delete</button>
                             </div>
                         </div>
-                        <div className='flex gap-2 mt-3 text-xs'>
-                            <span className='font-medium text-gray-700'>Email</span>
-                            <span> Abidkhan2381@gmail.com</span>
-                        </div>
-                        <div className='flex gap-2 text-xs'>
-                            <span className='font-medium text-gray-700'>Email</span>
-                            <span> Abidkhan2381@gmail.com</span>
-                        </div>
-                        <div className='flex gap-2 text-xs'>
-                            <span className='font-medium text-gray-700'>Email</span>
-                            <span> Abidkhan2381@gmail.com</span>
-                        </div>
-                        <div className='flex justify-end mt-4 gap-1  border-t border-gray-300 p-2'>
-                            <button onClick={() => setShowModel(true)} className='text-gray-700 hover:text-blue-500 px-2 py-1 text-xs border border-gray-400 hover:border-blue-500 rounded-lg '>Edit</button>
-                            <button className='text-gray-700  px-2 py-1 border border-gray-500 hover:border-red-600 hover:text-red-600 rounded-lg text-xs'>Delete</button>
-                        </div>
-                    </div>
+                    ))}
+
                 </div>
             </div >
             {showModel && <Model onSubmit={handleSubmit} onClose={() => setShowModel(false)} />}

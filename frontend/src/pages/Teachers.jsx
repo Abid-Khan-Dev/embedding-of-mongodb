@@ -23,6 +23,11 @@ function Teachers() {
         e.preventDefault();
         await axios.post('http://localhost:3000/teachers', form)
         setShowModel(false)
+        setForm({
+            name: '',
+            phone: '',
+            salary: ''
+        })
     }
 
     return (

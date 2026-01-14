@@ -29,7 +29,9 @@ function Model({ onClose, onSubmit, }) {
         console.log(res, 'teachers');
         setTeachers(res.data.teachers)
     }
+    
     useEffect(() => {
+        
         getTeachers()
     }, [])
 

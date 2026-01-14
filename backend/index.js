@@ -13,7 +13,7 @@ app.use(express.json());
 // get all Students
 app.get('/students', async (req, res) => {
     try {
-        const students = await Student.find()
+        const students = await Student.find().populate('teacher')
         return res.status(200).json({ students })
     } catch (error) {
         return res.status(500).json(error.message)
@@ -26,6 +26,7 @@ app.post('/students', async (req, res) => {
         console.log(req.body);
 
         await Student.create(req.body);
+        return res.status(201).json({ msg: 'Students is created' })
     } catch (error) {
         return res.status(500).json(error.message)
 
